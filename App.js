@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Snackbar from 'react-native-snackbar';
 
 const currencyPerRupee = {
   DOLLAR: 0.014,
@@ -18,12 +19,26 @@ const currencyPerRupee = {
   CANDOLLAR: 0.019,
   YEN: 1.54,
   DINAR: 0.0043,
-  BITCOIN: 0.0000004,
+  BITCOIN: 0.0004,
 };
 
 const App = () => {
   const [inputValue, setInputValue] = useState(0);
   const [resultValue, setResultValue] = useState(0);
+
+  const buttonPressed = currency => {
+    if (!inputValue) {
+      return Snackbar.show({
+        text: 'Please enter value',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#EA7773',
+        textColor: '#FFFFFF',
+      });
+    }
+    let result = parseFloat(inputValue) * currencyPerRupee[currency];
+    setResultValue(result.toFixed(2));
+    // setInputValue(0);
+  };
 
   return (
     <>
@@ -33,19 +48,26 @@ const App = () => {
         contentInsetAdjustmentBehavior="automatic">
         <SafeAreaView style={styles.container}>
           <View style={styles.resultContainer}>
-            <Text style={styles.resultValue}>12.23</Text>
+            <Text style={styles.resultValue}>{resultValue}</Text>
           </View>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               placeholder="Enter Value"
-              placeholderTextColor="#C1C1C1"></TextInput>
+              placeholderTextColor="#C1C1C1"
+              value={inputValue}
+              onChangeText={inputValue =>
+                setInputValue(inputValue)
+              }></TextInput>
           </View>
 
           <View style={styles.convertButtonContainer}>
             {Object.keys(currencyPerRupee).map(currancy => (
-              <TouchableOpacity key={currancy} style={styles.convertButton}>
+              <TouchableOpacity
+                key={currancy}
+                onPress={() => buttonPressed(currancy)}
+                style={styles.convertButton}>
                 <Text style={styles.convertButtonText}>{currancy}</Text>
               </TouchableOpacity>
             ))}
@@ -81,7 +103,7 @@ const styles = new StyleSheet.create({
     marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
+    borderBottomWidth: 2,
     borderColor: '#bbe1fa',
   },
   input: {
