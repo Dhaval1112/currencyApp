@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -26,7 +27,10 @@ const App = () => {
 
   return (
     <>
-      <ScrollView backgroundColor="#1b262c">
+      <ScrollView
+        backgroundColor="#1b262c"
+        keyboardShouldPersistTaps="handled"
+        contentInsetAdjustmentBehavior="automatic">
         <SafeAreaView style={styles.container}>
           <View style={styles.resultContainer}>
             <Text style={styles.resultValue}>12.23</Text>
@@ -37,6 +41,14 @@ const App = () => {
               keyboardType="numeric"
               placeholder="Enter Value"
               placeholderTextColor="#C1C1C1"></TextInput>
+          </View>
+
+          <View style={styles.convertButtonContainer}>
+            {Object.keys(currencyPerRupee).map(currancy => (
+              <TouchableOpacity key={currancy} style={styles.convertButton}>
+                <Text style={styles.convertButtonText}>{currancy}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </SafeAreaView>
       </ScrollView>
@@ -76,5 +88,24 @@ const styles = new StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     color: '#FFFFFF',
+  },
+  convertButtonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+  },
+  convertButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 100,
+    width: '33.33%',
+    borderWidth: 2,
+    borderColor: '#bbe1fa',
+    marginTop: 10,
+    backgroundColor: '#0f4c75',
+  },
+  convertButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
   },
 });
